@@ -91,7 +91,7 @@ int main() {
       // Loop over particles.
       for (int i = 0; i < event.size(); ++i) {
         // Add primary hadron rapidities to histogram.
-	int status = event[i].statusAbs();
+	int status = event[i].status();
 	if (status > 80 && status < 90) {
           dndy.fill(event[i].y());
 	}
