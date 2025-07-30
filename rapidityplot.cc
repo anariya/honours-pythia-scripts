@@ -8,12 +8,25 @@
 
 #include "Pythia8/Pythia.h"
 #include <vector>
+#include <string>
+#include <iomanip>
+#include <sstream>
+
 using namespace Pythia8;
+using namespace std;
+
+// Function to convert string masses to string with 2 decimal places.
+string to_string_2dp(double val) {
+  ostringstream out;
+  out << fixed << setprecision(2) << val;
+  return out.str();
+}
 
 int main() {
   // Specify invariant string CMEs to be simulated (in GeV), and number of
   // events to simulate per string CME.
   vector<double> masses = {5, 20, 100};
+  vector<string> plotColours = {"steelblue", "seagreen", "indianred"};
   int nEvent = 1000000;
 
   // Specify id of quark.
@@ -23,8 +36,15 @@ int main() {
   // Option for massless quarks.
   bool masslessQuarks = true;
 
+  // Initialise matplotlib setup
+  HistPlot hpl("rapidityplot");
+  hpl.frame("rapidityplot", "Rapidity distributions of primary "
+	    "hadrons for differing string energies", "y", "n");
+
   // Run separately for each invariant string mass.
-  for (double smass : masses) {
+  for (size_t iMass = 0; iMass < masses.size(); ++iMass) {
+    double smass = masses[iMass];
+
     // Set up generator.
     Pythia pythia;
     Event& event = pythia.event;
@@ -81,7 +101,13 @@ int main() {
     // Print statistics and histograms.
     pythia.stat();
     cout << dndy;
+
+    // Add histogram to matplotlib output.
+    hpl.add(dndy, "--," + plotColours[iMass], to_string_2dp(smass)
+	    + " GeV string");
   }
 
+  // Finalise and return
+  hpl.plot();
   return 0;
 }
