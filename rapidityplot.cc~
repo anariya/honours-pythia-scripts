@@ -1,0 +1,19 @@
+// PYTHIA script to generate histograms of rapidities of primary hadrons
+// produced by fragmentation. Simulation is done for a single q-qbar string
+// and only the hadronisation process is considered, with parton shower and
+// other effects disabled. The invariant mass of the string can be varied.
+// Assumes that settings are stored in the rapidityplot.cmnd file.
+
+// Author: Jade Abidi
+// Created: 30/07/2025
+
+#include "Pythia8/Pythia.h"
+using namespace Pythia8;
+
+int main() {
+  // Specify invariant string masses to be simulated (in GeV).
+  double mass[] = {5, 20, 100}
+  
+  Pythia pythia;
+  pythia.readfile("rapidityplot.cmnd");
+}
